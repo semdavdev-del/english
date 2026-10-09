@@ -1,0 +1,1889 @@
+<!doctype html>
+<html lang="km">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>English Bloom — រៀនអង់គ្លេសរាល់ថ្ងៃ</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --canvas: light-dark(#f6f7fb, #11131b);
+      --surface: light-dark(#ffffff, #1b1e29);
+      --surface-soft: light-dark(#f0f1f8, #242735);
+      --text: light-dark(#22243a, #f3f3fb);
+      --muted: light-dark(#85889e, #a3a7bd);
+      --line: light-dark(#e8e9f1, #343747);
+      --purple: light-dark(#7662ec, #a99aff);
+      --purple-dark: light-dark(#5e4bd0, #c5baff);
+      --mint: light-dark(#dff7ed, #244b42);
+      --mint-ink: light-dark(#208a68, #88e1bf);
+      --peach: light-dark(#fff0e4, #52392d);
+      --peach-ink: light-dark(#c46c37, #ffbb8b);
+      --blue-soft: light-dark(#e8f1ff, #263a59);
+      --blue-ink: light-dark(#4679d3, #9dbdff);
+      --yellow-soft: light-dark(#fff5cf, #51451f);
+      --yellow-ink: light-dark(#9c7721, #f4d775);
+      --shadow: 0 15px 45px rgba(44, 36, 100, .07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    select:focus-visible {
+      outline: 3px solid var(--purple);
+      outline-offset: 3px;
+    }
+
+    #app {
+      min-height: 100vh;
+      width: 100%;
+      background-color: var(--canvas);
+      border-radius: 0;
+    }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 244px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--line);
+      padding: 28px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 34px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 9px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: #e9e4ff;
+      color: #6653d6;
+      font-size: 23px;
+      box-shadow: inset 0 0 0 1px rgba(103, 83, 214, .1);
+    }
+
+    .brand-name {
+      font-weight: 850;
+      font-size: 19px;
+      letter-spacing: -.7px;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+
+    .nav-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 0 13px;
+      margin-bottom: 10px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 7px;
+    }
+
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 12px 14px;
+      border-radius: 13px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 700;
+      transition: .18s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .nav-btn.active {
+      color: var(--purple-dark);
+      background: light-dark(#efecff, #302a4d);
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+    }
+
+    .study-card {
+      padding: 17px;
+      border-radius: 18px;
+      background: var(--surface-soft);
+    }
+
+    .study-icon {
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      background: var(--yellow-soft);
+      border-radius: 13px;
+      font-size: 21px;
+      margin-bottom: 13px;
+    }
+
+    .study-card h3 {
+      font-size: 13px;
+      margin: 0 0 6px;
+    }
+
+    .study-card p {
+      font-size: 11px;
+      line-height: 1.6;
+      margin: 0 0 13px;
+      color: var(--muted);
+    }
+
+    .small-link {
+      border: 0;
+      background: none;
+      padding: 0;
+      font-weight: 800;
+      color: var(--purple-dark);
+      font-size: 11px;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 27px clamp(18px, 3.2vw, 48px) 48px;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 1.6px;
+      font-weight: 800;
+      margin: 0 0 8px;
+    }
+
+    h1 {
+      font-size: clamp(24px, 2.5vw, 32px);
+      line-height: 1.22;
+      letter-spacing: -1.05px;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 8px 0 0;
+      line-height: 1.65;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .date-chip {
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 10px 12px;
+      background: var(--surface);
+      white-space: nowrap;
+    }
+
+    .avatar {
+      width: 41px;
+      height: 41px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--peach);
+      font-size: 22px;
+    }
+
+    .view {
+      display: none;
+      animation: appear .24s ease;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(5px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .hero {
+      position: relative;
+      min-height: 230px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(190px, .7fr);
+      align-items: center;
+      gap: 12px;
+      padding: 30px 34px;
+      border-radius: 24px;
+      color: #fff;
+      background: linear-gradient(115deg, #7964ec 0%, #8d78f3 53%, #aa94f2 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero:before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 50%;
+      right: 8%;
+      top: -125px;
+    }
+
+    .hero:after {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 50%;
+      right: 2%;
+      bottom: -130px;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 510px;
+    }
+
+    .hero-kicker {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #e4ddff;
+      margin-bottom: 12px;
+    }
+
+    .hero h2 {
+      font-size: clamp(23px, 2.7vw, 34px);
+      letter-spacing: -1.1px;
+      line-height: 1.25;
+      margin: 0 0 10px;
+    }
+
+    .hero p {
+      color: #efebff;
+      font-size: 12px;
+      max-width: 390px;
+      line-height: 1.75;
+      margin: 0 0 20px;
+    }
+
+    .primary-btn {
+      border: 0;
+      border-radius: 12px;
+      background: #fff;
+      color: #5944c7;
+      font-weight: 850;
+      font-size: 12px;
+      padding: 12px 17px;
+      box-shadow: 0 5px 15px rgba(51, 39, 120, .15);
+      transition: transform .15s;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-art {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      min-height: 155px;
+    }
+
+    .art-orbit {
+      position: absolute;
+      width: 174px;
+      height: 174px;
+      border: 1px dashed rgba(255, 255, 255, .44);
+      border-radius: 50%;
+    }
+
+    .art-book {
+      width: 116px;
+      height: 128px;
+      display: grid;
+      place-items: center;
+      font-size: 70px;
+      background: #fff6dc;
+      border-radius: 22px 18px 22px 18px;
+      box-shadow: 8px 12px 0 rgba(55, 39, 151, .16);
+      transform: rotate(7deg);
+    }
+
+    .art-spark {
+      position: absolute;
+      font-size: 27px;
+    }
+
+    .spark-a {
+      top: 15px;
+      left: 23%;
+    }
+
+    .spark-b {
+      right: 14%;
+      bottom: 20px;
+      font-size: 22px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 28px 0 15px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -.35px;
+    }
+
+    .section-head p {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 5px 0 0;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 16px;
+      border-radius: 17px;
+      min-width: 0;
+    }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      font-size: 18px;
+    }
+
+    .stat-trend {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--mint-ink);
+      background: var(--mint);
+      padding: 5px 7px;
+      border-radius: 20px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: 850;
+      letter-spacing: -.8px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(250px, .8fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .lesson-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .lesson-row {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 15px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      transition: border-color .15s, transform .15s;
+    }
+
+    .lesson-row:hover {
+      border-color: var(--purple);
+      transform: translateY(-1px);
+    }
+
+    .lesson-emoji {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      background: var(--surface-soft);
+      font-size: 23px;
+    }
+
+    .lesson-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .lesson-info h3 {
+      font-size: 12px;
+      margin: 0 0 5px;
+    }
+
+    .lesson-info p {
+      font-size: 10px;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .lesson-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 7px;
+      border-radius: 7px;
+      background: var(--blue-soft);
+      color: var(--blue-ink);
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--purple-dark);
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-soft);
+    }
+
+    .right-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 19px;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .panel-title h3 {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .panel-title span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .goal-ring-wrap {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .goal-ring {
+      --progress: 40%;
+      width: 94px;
+      height: 94px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--purple) var(--progress), var(--surface-soft) 0);
+      position: relative;
+    }
+
+    .goal-ring:before {
+      content: "";
+      width: 73px;
+      height: 73px;
+      border-radius: 50%;
+      position: absolute;
+      background: var(--surface);
+    }
+
+    .goal-ring strong {
+      z-index: 1;
+      font-size: 19px;
+    }
+
+    .goal-copy {
+      min-width: 0;
+    }
+
+    .goal-copy strong {
+      font-size: 12px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .goal-copy p {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .progress-track {
+      height: 7px;
+      background: var(--surface-soft);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 20px;
+      background: var(--purple);
+      transition: width .35s ease;
+    }
+
+    .word-feature {
+      padding: 19px;
+      background: var(--peach);
+      border-radius: 18px;
+    }
+
+    .word-feature-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .word-feature-top span {
+      color: var(--peach-ink);
+      font-size: 9px;
+      letter-spacing: 1px;
+      font-weight: 900;
+    }
+
+    .word-feature-emoji {
+      font-size: 35px;
+      margin: 5px 0;
+    }
+
+    .word-feature h3 {
+      font-size: 23px;
+      margin: 3px 0;
+      letter-spacing: -.5px;
+    }
+
+    .word-feature .meaning {
+      font-size: 12px;
+      color: var(--peach-ink);
+      margin: 0 0 9px;
+    }
+
+    .word-feature .example {
+      font-size: 10px;
+      line-height: 1.6;
+      color: light-dark(#75503a, #f1c4a7);
+      margin: 0 0 13px;
+    }
+
+    .outline-btn {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .outline-btn:hover {
+      border-color: var(--purple);
+    }
+
+    .mini-path {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .path-card {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 15px;
+      text-align: left;
+      transition: .15s;
+      min-width: 0;
+    }
+
+    .path-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--purple);
+    }
+
+    .path-emoji {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      margin-bottom: 12px;
+    }
+
+    .path-card strong {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 5px;
+    }
+
+    .path-card small {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .path-card .progress-track {
+      margin-top: 12px;
+      height: 5px;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 17px;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 11px;
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-weight: 750;
+    }
+
+    .filter-btn.active {
+      background: light-dark(#efecff, #302a4d);
+      color: var(--purple-dark);
+      border-color: transparent;
+    }
+
+    .all-lessons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .course-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 17px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .course-art {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      font-size: 25px;
+      background: var(--surface-soft);
+    }
+
+    .course-card h3 {
+      font-size: 14px;
+      margin: 0 0 7px;
+    }
+
+    .course-card p {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+      margin: 0 0 13px;
+    }
+
+    .course-card .bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 14px;
+    }
+
+    .small-primary {
+      border: 0;
+      border-radius: 10px;
+      background: var(--purple);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 850;
+      padding: 10px 13px;
+    }
+
+    .small-primary:hover {
+      filter: brightness(1.06);
+    }
+
+    .vocab-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(230px, .8fr);
+      gap: 19px;
+      align-items: start;
+    }
+
+    .flashcard {
+      padding: 25px;
+      min-height: 335px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .card-counter {
+      position: absolute;
+      top: 20px;
+      left: 22px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .flash-emoji {
+      font-size: 64px;
+      margin-bottom: 18px;
+    }
+
+    .flash-word {
+      font-size: 35px;
+      letter-spacing: -1px;
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .flash-phonetic {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 8px 0 10px;
+    }
+
+    .flash-meaning {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 12px;
+    }
+
+    .flash-example {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .flash-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .round-btn {
+      width: 43px;
+      height: 43px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 13px;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .speak-btn {
+      border: 0;
+      background: var(--purple);
+      color: white;
+      font-size: 11px;
+      font-weight: 850;
+      padding: 13px 18px;
+      border-radius: 13px;
+    }
+
+    .word-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .word-list-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 13px;
+      text-align: left;
+    }
+
+    .word-list-item.selected {
+      border-color: var(--purple);
+      background: light-dark(#f2efff, #2a2642);
+    }
+
+    .word-list-item .w-emoji {
+      font-size: 23px;
+    }
+
+    .word-list-item .w-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .word-list-item strong {
+      font-size: 11px;
+      display: block;
+    }
+
+    .word-list-item small {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .quiz-shell {
+      max-width: 790px;
+      margin: 0 auto;
+    }
+
+    .quiz-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: clamp(20px, 4vw, 34px);
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-progress-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+
+    .quiz-progress {
+      height: 6px;
+      background: var(--surface-soft);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .quiz-progress div {
+      height: 100%;
+      background: var(--purple);
+      transition: width .2s;
+    }
+
+    .quiz-kicker {
+      color: var(--purple-dark);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .quiz-question {
+      font-size: clamp(20px, 3vw, 27px);
+      line-height: 1.4;
+      margin: 0 0 9px;
+      letter-spacing: -.6px;
+    }
+
+    .quiz-help {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .quiz-option {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      padding: 14px 15px;
+      border-radius: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--purple);
+      background: var(--surface-soft);
+    }
+
+    .option-key {
+      width: 27px;
+      height: 27px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .quiz-option.chosen {
+      border-color: var(--purple);
+      background: light-dark(#f1eeff, #2c2748);
+    }
+
+    .quiz-option.correct {
+      border-color: #37b789;
+      background: light-dark(#e8fbf3, #1f4136);
+    }
+
+    .quiz-option.incorrect {
+      border-color: #e28d7e;
+      background: light-dark(#fff0ed, #4b2a2a);
+    }
+
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .quiz-feedback {
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .quiz-result {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .result-emoji {
+      font-size: 66px;
+    }
+
+    .quiz-result h2 {
+      font-size: 25px;
+      margin: 10px 0;
+    }
+
+    .quiz-result p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .result-score {
+      font-size: 43px;
+      font-weight: 900;
+      color: var(--purple-dark);
+      margin: 14px 0;
+    }
+
+    .progress-overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 13px;
+      margin-bottom: 18px;
+    }
+
+    .progress-big {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .progress-big .big-value {
+      font-size: 27px;
+      font-weight: 900;
+      margin: 9px 0 4px;
+    }
+
+    .progress-big .big-label {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .chart-card {
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .bar-chart {
+      height: 190px;
+      display: flex;
+      align-items: end;
+      justify-content: space-around;
+      gap: 11px;
+      border-bottom: 1px solid var(--line);
+      padding: 0 5px 0;
+      margin: 20px 0 9px;
+    }
+
+    .bar-wrap {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .bar {
+      width: min(39px, 70%);
+      background: light-dark(#ddd7ff, #4c426f);
+      border-radius: 8px 8px 2px 2px;
+      transition: height .3s;
+      position: relative;
+    }
+
+    .bar.today {
+      background: var(--purple);
+    }
+
+    .bar-day {
+      font-size: 10px;
+      color: var(--muted);
+      padding-bottom: 8px;
+    }
+
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .achievement {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .achievement .badge-emoji {
+      font-size: 29px;
+      margin-bottom: 8px;
+    }
+
+    .achievement strong {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 5px;
+    }
+
+    .achievement p {
+      font-size: 9px;
+      line-height: 1.55;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .achievement.locked {
+      opacity: .55;
+      filter: grayscale(.6);
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 30;
+      bottom: 22px;
+      left: 50%;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      background: var(--text);
+      color: var(--surface);
+      padding: 12px 17px;
+      border-radius: 13px;
+      font-size: 12px;
+      font-weight: 750;
+      box-shadow: var(--shadow);
+      transition: .22s ease;
+      max-width: calc(100vw - 30px);
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .mobile-nav {
+      display: none;
+    }
+
+    .empty-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      padding: 24px;
+      text-align: center;
+    }
+
+
+    .manage-box{margin:18px 0 22px;padding:20px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+    .manage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .manage-box label{display:block;font-size:11px;font-weight:800;margin-bottom:6px}
+    .manage-box input,.manage-box textarea,.manage-box select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--canvas);color:var(--text);font:inherit;font-size:12px}
+    .manage-box textarea{min-height:90px;resize:vertical}.manage-box .full{grid-column:1/-1}
+    .upload-preview{max-width:180px;max-height:140px;object-fit:contain;border-radius:12px;margin-top:10px;display:none}
+    .song-row{padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--surface);margin-top:10px}
+    .song-row audio{width:100%;margin-top:8px}
+    .manage-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    @media(max-width:600px){.manage-grid{grid-template-columns:1fr}.manage-box .full{grid-column:auto}}
+
+    @media (max-width:1100px) {
+      .layout {
+        grid-template-columns: 210px minmax(0, 1fr);
+      }
+
+      .sidebar {
+        padding: 23px 13px;
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .content-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(220px, .75fr);
+      }
+
+      .mini-path {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width:780px) {
+      .layout {
+        display: block;
+        padding-bottom: 76px;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        padding: 20px 16px 35px;
+      }
+
+      .topbar {
+        margin-bottom: 22px;
+      }
+
+      .date-chip {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: minmax(0, 1fr) 120px;
+        padding: 23px 21px;
+        min-height: 225px;
+      }
+
+      .hero-art {
+        min-height: 120px;
+      }
+
+      .art-orbit {
+        width: 120px;
+        height: 120px;
+      }
+
+      .art-book {
+        width: 82px;
+        height: 95px;
+        font-size: 52px;
+      }
+
+      .hero p {
+        font-size: 11px;
+      }
+
+      .content-grid,
+      .vocab-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .right-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .all-lessons {
+        grid-template-columns: 1fr;
+      }
+
+      .mobile-nav {
+        position: fixed;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 2px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 9px 7px calc(9px + env(safe-area-inset-bottom));
+        background: var(--surface);
+        border-top: 1px solid var(--line);
+        z-index: 20;
+        box-shadow: 0 -8px 25px rgba(35, 32, 65, .05);
+      }
+
+      .mobile-nav .nav-btn {
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        padding: 6px 2px;
+        border-radius: 10px;
+        font-size: 9px;
+        white-space: nowrap;
+      }
+
+      .mobile-nav .nav-icon {
+        font-size: 18px;
+      }
+
+      .progress-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width:470px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-art {
+        display: none;
+      }
+
+      .hero {
+        min-height: 0;
+      }
+
+      .stat-grid {
+        gap: 9px;
+      }
+
+      .stat-card {
+        padding: 13px;
+      }
+
+      .stat-value {
+        font-size: 22px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+      }
+
+      .right-stack {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        margin-top: 24px;
+      }
+
+      .mini-path {
+        gap: 9px;
+      }
+
+      .path-card {
+        padding: 12px;
+      }
+
+      .lesson-row {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .lesson-emoji {
+        width: 40px;
+        height: 40px;
+      }
+
+      .topbar .subtitle {
+        max-width: 245px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="layout">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <div class="brand-mark">✿</div>
+          <div>
+            <div class="brand-name">English Bloom</div>
+            <div class="brand-sub">GROW EVERY DAY</div>
+          </div>
+        </div>
+        <div>
+          <div class="nav-label">MENU</div>
+          <nav class="nav" id="desktopNav">
+            <button class="nav-btn active" data-view="home"><span class="nav-icon">⌂</span>ផ្ទាំងដើម <span
+                style="margin-left:auto;font-size:10px">•</span></button>
+            <button class="nav-btn" data-view="lessons"><span class="nav-icon">▤</span>មេរៀន</button>
+            <button class="nav-btn" data-view="vocabulary"><span class="nav-icon">▧</span>ពាក្យថ្មី</button>
+            <button class="nav-btn" data-view="practice"><span class="nav-icon">✎</span>ហាត់អនុវត្ត</button>
+            <button class="nav-btn" data-view="progress"><span class="nav-icon">▥</span>វឌ្ឍនភាព</button>
+          </nav>
+        </div>
+        <div class="sidebar-bottom">
+          <div class="study-card">
+            <div class="study-icon">🌱</div>
+            <h3>មួយថ្ងៃបន្តិចៗ</h3>
+            <p>រៀនរាល់ថ្ងៃ គឺជាជំហានតូចៗទៅរកភាពរីកចម្រើនធំៗ។</p><button class="small-link"
+              data-goto="lessons">បន្តការរៀន ↗</button>
+          </div>
+          <p style="padding:12px 8px 0;font-size:9px;line-height:1.6;color:var(--muted)">Made for curious learners 💜
+          </p>
+        </div>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="pageEyebrow">FRIDAY, OCTOBER 9</p>
+            <h1 id="pageTitle">សួស្តី អ្នករៀនពូកែ! 👋</h1>
+            <p class="subtitle" id="pageSubtitle">ត្រៀមខ្លួនរៀនពាក្យថ្មីៗមួយចំនួនថ្ងៃនេះហើយឬនៅ?</p>
+          </div>
+          <div class="top-actions">
+            <div class="date-chip" id="dateChip">📅 ថ្ងៃសិក្សាថ្មី</div>
+            <div class="avatar" aria-label="Learner avatar">🧑🏻‍🎓</div>
+          </div>
+        </header>
+
+        <section class="view active" id="view-home">
+          <div class="hero">
+            <div class="hero-copy">
+              <div class="hero-kicker">✦ YOUR LITTLE DAILY WIN</div>
+              <h2>រៀនអង់គ្លេស<br>ឱ្យកាន់តែពូកែ! ✨</h2>
+              <p>មេរៀនខ្លីៗ លំហាត់សប្បាយៗ និងពាក្យថ្មីៗ ដែលជួយឱ្យអ្នកប្រើអង់គ្លេសបានរាល់ថ្ងៃ។</p><button
+                class="primary-btn" id="startToday">ចាប់ផ្ដើមមេរៀនថ្ងៃនេះ&nbsp; →</button>
+            </div>
+            <div class="hero-art">
+              <div class="art-orbit"></div><span class="art-spark spark-a">✦</span>
+              <div class="art-book">📚</div><span class="art-spark spark-b">✨</span>
+            </div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon" style="background:var(--peach)">🔥</div><span class="stat-trend"
+                  id="streakHint">បន្តទៅទៀត!</span>
+              </div>
+              <div class="stat-value" id="streakValue">0 ថ្ងៃ</div>
+              <div class="stat-label">ថ្ងៃរៀនជាប់គ្នា</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon" style="background:var(--yellow-soft)">⭐</div><span class="stat-trend">+XP</span>
+              </div>
+              <div class="stat-value" id="xpValue">0</div>
+              <div class="stat-label">ពិន្ទុសរុប</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon" style="background:var(--mint)">📖</div><span
+                  class="stat-trend">កំពុងរីកចម្រើន</span>
+              </div>
+              <div class="stat-value" id="lessonValue">0</div>
+              <div class="stat-label">មេរៀនបានបញ្ចប់</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon" style="background:var(--blue-soft)">💬</div><span
+                  class="stat-trend">ពាក្យថ្មីៗ</span>
+              </div>
+              <div class="stat-value" id="wordValue">0</div>
+              <div class="stat-label">ពាក្យបានរៀន</div>
+            </div>
+          </div>
+          <div class="content-grid">
+            <div>
+              <div class="section-head">
+                <div>
+                  <h2>ផែនការរៀនថ្ងៃនេះ</h2>
+                  <p>ធ្វើបន្តិចម្ដងៗតាមល្បឿនរបស់អ្នក</p>
+                </div><button class="small-link" data-goto="lessons">មើលទាំងអស់ →</button>
+              </div>
+              <div class="lesson-list" id="dailyLessons"></div>
+              <div class="section-head">
+                <div>
+                  <h2>ផ្លូវរៀនរបស់ខ្ញុំ</h2>
+                  <p>ជ្រើសរើសជំនាញដែលចង់ហាត់</p>
+                </div>
+              </div>
+              <div class="mini-path" id="homePath"></div>
+            </div>
+            <div class="right-stack">
+              <div class="panel">
+                <div class="panel-title">
+                  <h3>គោលដៅប្រចាំថ្ងៃ</h3><span id="goalLabel">20 នាទី</span>
+                </div>
+                <div class="goal-ring-wrap">
+                  <div class="goal-ring" id="goalRing" style="--progress:0%"><strong id="goalPercent">0%</strong></div>
+                  <div class="goal-copy"><strong id="goalStatus">ចាប់ផ្ដើមថ្ងៃនេះ</strong>
+                    <p id="goalDescription">បញ្ចប់មេរៀនមួយ ដើម្បីចូលទៅជិតគោលដៅរបស់អ្នក។</p>
+                  </div>
+                </div>
+                <div style="margin-top:18px">
+                  <div class="progress-track">
+                    <div class="progress-fill" id="goalBar" style="width:0%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="word-feature">
+                <div class="word-feature-top"><span>✦ WORD OF THE DAY</span><span>01 / 10</span></div>
+                <div class="word-feature-emoji">🌻</div>
+                <h3>Beautiful</h3>
+                <p class="meaning">ស្រស់ស្អាត</p>
+                <p class="example">“The garden is beautiful.”<br>សួនច្បារនោះស្រស់ស្អាត។</p><button class="outline-btn"
+                  id="todayWordSpeak">🔊 ស្ដាប់ការបញ្ចេញសំឡេង</button>
+              </div>
+              <div class="panel">
+                <div class="panel-title">
+                  <h3>គន្លឹះថ្ងៃនេះ</h3><span>💡</span>
+                </div>
+                <p style="font-size:11px;line-height:1.8;color:var(--muted);margin:0">
+                  សាកល្បងនិយាយប្រយោគអង់គ្លេសមួយឃ្លាៗចេញមកក្រៅមាត់។ ការហាត់និយាយជារៀងរាល់ថ្ងៃជួយបង្កើនទំនុកចិត្ត។</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-lessons">
+          <div class="section-head" style="margin-top:0">
+            <div>
+              <h2>បណ្ណាល័យមេរៀន 📚</h2>
+              <p>ជ្រើសរើសមេរៀនតាមប្រធានបទដែលអ្នកចូលចិត្ត</p>
+            </div>
+          </div>
+          <details class="manage-box" open>
+            <summary style="font-weight:850;cursor:pointer">✏️ បន្ថែម / កែប្រែមេរៀន និងបញ្ចូលរូបភាព</summary>
+            <p style="font-size:11px;color:var(--muted);line-height:1.7">បំពេញព័ត៌មានខាងក្រោម រួចចុចរក្សាទុក។ មេរៀនដែលអ្នកបង្កើតនឹងបង្ហាញក្នុងបណ្ណាល័យ។</p>
+            <form id="lessonForm">
+              <input type="hidden" id="editLessonId">
+              <div class="manage-grid">
+                <div><label for="customTitle">ចំណងជើងមេរៀន (ខ្មែរ) *</label><input id="customTitle" required maxlength="100" placeholder="ឧ. ផ្លែឈើ និងបន្លែ"></div>
+                <div><label for="customEnglish">ចំណងជើងជាអង់គ្លេស</label><input id="customEnglish" maxlength="100" placeholder="Fruits and Vegetables"></div>
+                <div><label for="customCategory">ប្រភេទ</label><select id="customCategory"><option value="Vocabulary">ពាក្យថ្មី</option><option value="Grammar">វេយ្យាករណ៍</option><option value="Speaking">ការនិយាយ</option><option value="Reading">ការអាន</option></select></div>
+                <div><label for="customEmoji">រូបតំណាង Emoji</label><input id="customEmoji" maxlength="8" value="📘"></div>
+                <div class="full"><label for="customDescription">សេចក្ដីពិពណ៌នា</label><textarea id="customDescription" maxlength="1000" placeholder="សរសេរអំពីមេរៀននេះ..."></textarea></div>
+                <div class="full"><label for="customContent">ខ្លឹមសារមេរៀន (មួយបន្ទាត់មួយឃ្លា៖ English = ខ្មែរ) *</label><textarea id="customContent" required placeholder="Apple = ផ្លែប៉ោម&#10;Banana = ចេក"></textarea></div>
+                <div class="full"><label for="customImage">បញ្ចូលរូបភាពមេរៀន</label><input id="customImage" type="file" accept="image/*"><img id="customImagePreview" class="upload-preview" alt="រូបភាពមេរៀនដែលបានជ្រើស"></div>
+              </div>
+              <div class="manage-actions"><button class="small-primary" type="submit">💾 រក្សាទុកមេរៀន</button><button class="outline-btn" type="button" id="cancelLessonEdit">សម្អាត / បោះបង់ការកែ</button></div>
+              <p style="font-size:10px;color:var(--muted)">ចំណាំ៖ ទិន្នន័យរក្សាទុកក្នុង browser លើឧបករណ៍នេះ។ រូបភាពត្រូវតែតូចជាង 2MB។</p>
+            </form>
+          </details>
+          <details class="manage-box">
+            <summary style="font-weight:850;cursor:pointer">🎵 បញ្ចូលចម្រៀង / សំឡេងសម្រាប់ស្ដាប់</summary>
+            <p style="font-size:11px;color:var(--muted);line-height:1.7">ជ្រើសរើសឯកសារសំឡេងពីឧបករណ៍របស់អ្នក ដើម្បីចាក់ស្ដាប់នៅទីនេះ។</p>
+            <form id="songForm"><div class="manage-grid"><div class="full"><label for="songTitle">ឈ្មោះចម្រៀង / សំឡេង *</label><input id="songTitle" required maxlength="100" placeholder="ឧ. English listening practice"></div><div class="full"><label for="songFile">ជ្រើសរើសឯកសារសំឡេង *</label><input id="songFile" type="file" accept="audio/*" required></div></div><div class="manage-actions"><button class="small-primary" type="submit">＋ បន្ថែមទៅបញ្ជីស្ដាប់</button></div><p style="font-size:10px;color:var(--muted)">ឯកសារសំឡេងត្រូវតែតូចជាង 3MB ដើម្បីរក្សាទុកក្នុង browser។</p></form>
+            <div id="songLibrary"></div>
+          </details>
+          <div class="filter-row" id="lessonFilters"><button class="filter-btn active"
+              data-filter="all">មេរៀនទាំងអស់</button><button class="filter-btn"
+              data-filter="Vocabulary">ពាក្យថ្មី</button><button class="filter-btn"
+              data-filter="Grammar">វេយ្យាករណ៍</button><button class="filter-btn"
+              data-filter="Speaking">ការនិយាយ</button><button class="filter-btn" data-filter="Reading">ការអាន</button>
+          </div>
+          <div class="all-lessons" id="allLessons"></div>
+        </section>
+
+        <section class="view" id="view-vocabulary">
+          <div class="section-head" style="margin-top:0">
+            <div>
+              <h2>ពាក្យថ្មីប្រចាំថ្ងៃ 🌈</h2>
+              <p>ស្ដាប់ អាន និងចងចាំពាក្យអង់គ្លេសជាមួយន័យខ្មែរ</p>
+            </div><span class="pill" id="wordCountPill">10 WORDS</span>
+          </div>
+          <div class="filter-row" id="wordFilters"><button class="filter-btn active"
+              data-wordfilter="all">ទាំងអស់</button><button class="filter-btn"
+              data-wordfilter="daily">ជីវិតប្រចាំថ្ងៃ</button><button class="filter-btn"
+              data-wordfilter="people">មនុស្ស</button><button class="filter-btn" data-wordfilter="things">វត្ថុ</button>
+          </div>
+          <div class="vocab-layout">
+            <div>
+              <div class="flashcard" id="flashcard">
+                <div class="card-counter" id="flashCounter">ពាក្យ 1 ក្នុង 10</div>
+                <div class="flash-emoji" id="flashEmoji">🌻</div>
+                <h2 class="flash-word" id="flashWord">Beautiful</h2>
+                <p class="flash-phonetic" id="flashPhonetic">/ˈbjuːtɪfəl/</p>
+                <p class="flash-meaning" id="flashMeaning">ស្រស់ស្អាត</p>
+                <p class="flash-example" id="flashExample">The garden is beautiful.<br>សួនច្បារនោះស្រស់ស្អាត។</p>
+              </div>
+              <div class="flash-controls"><button class="round-btn" id="prevWord"
+                  aria-label="Previous word">←</button><button class="speak-btn" id="speakWord">🔊
+                  ស្ដាប់ពាក្យ</button><button class="round-btn" id="nextWord" aria-label="Next word">→</button></div>
+            </div>
+            <div>
+              <div class="panel-title">
+                <h3>ពាក្យក្នុងមេរៀននេះ</h3><span>ចុចដើម្បីរៀន</span>
+              </div>
+              <div class="word-list" id="wordList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-practice">
+          <div class="section-head" style="margin-top:0">
+            <div>
+              <h2>ពេលវេលាហាត់អនុវត្ត ✍️</h2>
+              <p>សំណួរខ្លីៗដើម្បីពិនិត្យអ្វីដែលអ្នកបានរៀន</p>
+            </div>
+          </div>
+          <div class="quiz-shell">
+            <div class="quiz-card" id="quizCard">
+              <div class="quiz-progress-label"><span id="quizStepLabel">សំណួរ 1 ក្នុង 5</span><span
+                  id="quizScoreLabel">ពិន្ទុ 0</span></div>
+              <div class="quiz-progress">
+                <div id="quizProgressFill" style="width:20%"></div>
+              </div>
+              <div id="quizContent"></div>
+            </div>
+            <div class="panel" style="margin-top:14px;display:flex;align-items:center;gap:13px">
+              <div style="font-size:28px">💡</div>
+              <div><strong style="font-size:12px">កុំបារម្ភបើឆ្លើយខុស</strong>
+                <p style="font-size:10px;line-height:1.7;color:var(--muted);margin:4px 0 0">កំហុសជាផ្នែកមួយនៃការរៀន។
+                  អានការពន្យល់ ហើយសាកល្បងម្ដងទៀត!</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-progress">
+          <div class="section-head" style="margin-top:0">
+            <div>
+              <h2>វឌ្ឍនភាពរបស់ខ្ញុំ 🎯</h2>
+              <p>រាល់ជំហានតូចៗរបស់អ្នកមានតម្លៃ</p>
+            </div>
+          </div>
+          <div class="progress-overview">
+            <div class="progress-big">
+              <div class="stat-icon" style="background:var(--yellow-soft)">⭐</div>
+              <div class="big-value" id="progressXP">0 XP</div>
+              <div class="big-label">ពិន្ទុដែលប្រមូលបាន</div>
+            </div>
+            <div class="progress-big">
+              <div class="stat-icon" style="background:var(--mint)">📚</div>
+              <div class="big-value" id="progressLessons">0 / 8</div>
+              <div class="big-label">មេរៀនបានបញ្ចប់</div>
+            </div>
+            <div class="progress-big">
+              <div class="stat-icon" style="background:var(--peach)">🔥</div>
+              <div class="big-value" id="progressStreak">0 ថ្ងៃ</div>
+              <div class="big-label">ថ្ងៃរៀនជាប់គ្នា</div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="panel-title">
+              <div>
+                <h3>សកម្មភាពរៀន</h3><span style="display:block;margin-top:5px">នាទីហាត់រៀនក្នុងសប្ដាហ៍នេះ</span>
+              </div><span>📈 7 ថ្ងៃ</span>
+            </div>
+            <div class="bar-chart" id="activityChart"></div>
+            <div style="font-size:10px;color:var(--muted)">បញ្ចប់មេរៀននីមួយៗ ដើម្បីបន្ថែមពេលវេលារៀនរបស់អ្នក។</div>
+          </div>
+          <div class="section-head">
+            <div>
+              <h2>សមិទ្ធផលរបស់ខ្ញុំ 🏆</h2>
+              <p>បន្តហាត់ ដើម្បីដោះសោសមិទ្ធផលថ្មីៗ</p>
+            </div>
+          </div>
+          <div class="achievement-grid" id="achievementGrid"></div>
+        </section>
+      </main>
+    </div>
+    <nav class="mobile-nav" aria-label="Mobile navigation"><button class="nav-btn active" data-view="home"><span
+          class="nav-icon">⌂</span>ដើម</button><button class="nav-btn" data-view="lessons"><span
+          class="nav-icon">▤</span>មេរៀន</button><button class="nav-btn" data-view="vocabulary"><span
+          class="nav-icon">▧</span>ពាក្យថ្មី</button><button class="nav-btn" data-view="practice"><span
+          class="nav-icon">✎</span>ហាត់</button><button class="nav-btn" data-view="progress"><span
+          class="nav-icon">▥</span>វឌ្ឍនភាព</button></nav>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script>
+    (() => {
+      'use strict';
+      let lessons = [
+        { id: 'hello', title: 'ការណែនាំខ្លួន', en: 'Introducing Yourself', category: 'Speaking', emoji: '👋', level: 'Beginner', duration: 5, description: 'រៀននិយាយឈ្មោះ អាយុ និងសួរសុខទុក្ខជាភាសាអង់គ្លេស។', xp: 20, content: [['Hello!', 'សួស្តី!'], ['My name is Dara.', 'ខ្ញុំឈ្មោះដារ៉ា។'], ['How are you?', 'អ្នកសុខសប្បាយទេ?'], ['I am fine, thank you.', 'ខ្ញុំសុខសប្បាយទេ អរគុណ។']] },
+        { id: 'colors', title: 'ពណ៌ជុំវិញខ្លួន', en: 'Colors Around Us', category: 'Vocabulary', emoji: '🎨', level: 'Beginner', duration: 5, description: 'ស្គាល់ពណ៌សំខាន់ៗ និងរៀនប្រើពាក្យពណ៌ក្នុងប្រយោគ។', xp: 20, content: [['Red', 'ពណ៌ក្រហម'], ['Blue', 'ពណ៌ខៀវ'], ['Green', 'ពណ៌បៃតង'], ['Yellow', 'ពណ៌លឿង']] },
+        { id: 'tobe', title: 'កិរិយាសព្ទ am / is / are', en: 'Verb to be', category: 'Grammar', emoji: '🧩', level: 'Beginner', duration: 7, description: 'យល់ពីរបៀបប្រើ am, is និង are ក្នុងប្រយោគសាមញ្ញ។', xp: 25, content: [['I am happy.', 'ខ្ញុំសប្បាយចិត្ត។'], ['She is a student.', 'នាងជាសិស្ស។'], ['They are friends.', 'ពួកគេជាមិត្តភក្តិ។']] },
+        { id: 'family', title: 'សមាជិកគ្រួសារ', en: 'My Family', category: 'Vocabulary', emoji: '👨‍👩‍👧', level: 'Beginner', duration: 5, description: 'រៀនពាក្យ mother, father, sister និង brother។', xp: 20, content: [['Mother', 'ម្ដាយ'], ['Father', 'ឪពុក'], ['Sister', 'បងស្រី ឬ ប្អូនស្រី'], ['Brother', 'បងប្រុស ឬ ប្អូនប្រុស']] },
+        { id: 'food', title: 'អាហារ និងភេសជ្ជៈ', en: 'Food & Drinks', category: 'Vocabulary', emoji: '🍎', level: 'Beginner', duration: 6, description: 'រៀនឈ្មោះអាហារដែលជួបប្រទះរាល់ថ្ងៃ។', xp: 20, content: [['Water', 'ទឹក'], ['Rice', 'បាយ'], ['Apple', 'ផ្លែប៉ោម'], ['Milk', 'ទឹកដោះគោ']] },
+        { id: 'simple', title: 'ប្រយោគ Present Simple', en: 'Present Simple', category: 'Grammar', emoji: '📝', level: 'Beginner', duration: 8, description: 'ប្រើ Present Simple ដើម្បីនិយាយពីទម្លាប់ និងសកម្មភាពប្រចាំថ្ងៃ។', xp: 25, content: [['I go to school.', 'ខ្ញុំទៅសាលារៀន។'], ['She reads every day.', 'នាងអានរាល់ថ្ងៃ។'], ['We play football.', 'យើងលេងបាល់ទាត់។']] },
+        { id: 'reading', title: 'អានរឿងខ្លី', en: 'A Little Story', category: 'Reading', emoji: '📖', level: 'Beginner', duration: 7, description: 'ហាត់អានកថាខណ្ឌខ្លីមួយ ហើយស្វែងរកន័យពាក្យថ្មី។', xp: 25, content: [['This is Lina.', 'នេះគឺលីណា។'], ['She has a small cat.', 'នាងមានឆ្មាតូចមួយ។'], ['The cat is white.', 'ឆ្មាមានពណ៌ស។']] },
+        { id: 'school', title: 'នៅសាលារៀន', en: 'At School', category: 'Speaking', emoji: '🎒', level: 'Beginner', duration: 6, description: 'រៀនប្រយោគមានប្រយោជន៍ដែលប្រើនៅក្នុងថ្នាក់រៀន។', xp: 20, content: [['May I come in?', 'ខ្ញុំអាចចូលបានទេ?'], ['Please repeat.', 'សូមនិយាយម្ដងទៀត។'], ['I understand.', 'ខ្ញុំយល់ហើយ។']] }
+      ];
+      const baseLessons = lessons.map(l => ({...l}));
+      let customLessons = loadStored('englishBloomCustomLessons', []);
+      let songs = loadStored('englishBloomSongs', []);
+      function loadStored(key, fallback) { try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : fallback; } catch (_) { return fallback; } }
+      function refreshLessons() { lessons = [...baseLessons, ...customLessons]; }
+      refreshLessons();
+      const words = [
+        { en: 'Beautiful', km: 'ស្រស់ស្អាត', phon: '/ˈbjuːtɪfəl/', emoji: '🌻', category: 'daily', example: 'The garden is beautiful.', translation: 'សួនច្បារនោះស្រស់ស្អាត។' },
+        { en: 'Happy', km: 'សប្បាយចិត្ត', phon: '/ˈhæpi/', emoji: '😊', category: 'daily', example: 'I am happy today.', translation: 'ថ្ងៃនេះខ្ញុំសប្បាយចិត្ត។' },
+        { en: 'Family', km: 'គ្រួសារ', phon: '/ˈfæməli/', emoji: '👨‍👩‍👧', category: 'people', example: 'I love my family.', translation: 'ខ្ញុំស្រឡាញ់គ្រួសាររបស់ខ្ញុំ។' },
+        { en: 'Friend', km: 'មិត្តភក្តិ', phon: '/frend/', emoji: '🧑‍🤝‍🧑', category: 'people', example: 'She is my best friend.', translation: 'នាងជាមិត្តល្អបំផុតរបស់ខ្ញុំ។' },
+        { en: 'Book', km: 'សៀវភៅ', phon: '/bʊk/', emoji: '📚', category: 'things', example: 'This is my book.', translation: 'នេះគឺជាសៀវភៅរបស់ខ្ញុំ។' },
+        { en: 'Water', km: 'ទឹក', phon: '/ˈwɔːtər/', emoji: '💧', category: 'daily', example: 'Can I have some water?', translation: 'ខ្ញុំសុំទឹកបន្តិចបានទេ? ' },
+        { en: 'School', km: 'សាលារៀន', phon: '/skuːl/', emoji: '🏫', category: 'things', example: 'I go to school every day.', translation: 'ខ្ញុំទៅសាលារៀនរាល់ថ្ងៃ។' },
+        { en: 'Kind', km: 'ចិត្តល្អ', phon: '/kaɪnd/', emoji: '💖', category: 'people', example: 'My teacher is kind.', translation: 'គ្រូរបស់ខ្ញុំចិត្តល្អ។' },
+        { en: 'Apple', km: 'ផ្លែប៉ោម', phon: '/ˈæpəl/', emoji: '🍎', category: 'things', example: 'I eat an apple.', translation: 'ខ្ញុំញ៉ាំផ្លែប៉ោមមួយ។' },
+        { en: 'Learn', km: 'រៀន', phon: '/lɜːrn/', emoji: '🌱', category: 'daily', example: 'I learn English every day.', translation: 'ខ្ញុំរៀនភាសាអង់គ្លេសរាល់ថ្ងៃ។' }
+      ];
+      const questions = [
+        { q: 'តើ “សួស្តី” ជាភាសាអង់គ្លេសថាម៉េច?', hint: 'Choose the correct greeting.', options: ['Goodbye', 'Hello', 'Thank you', 'Sorry'], answer: 1, explain: 'Hello មានន័យថា សួស្តី។' },
+        { q: 'ជ្រើសរើសពាក្យដែលត្រឹមត្រូវ៖ I ___ happy.', hint: 'ប្រើកិរិយាសព្ទ to be ជាមួយ I។', options: ['is', 'are', 'am', 'be'], answer: 2, explain: 'យើងប្រើ “I am” ដូចជា “I am happy.”' },
+        { q: 'តើ “Apple” មានន័យថាអ្វី?', hint: 'Think of a red or green fruit.', options: ['ចេក', 'ផ្លែប៉ោម', 'ក្រូច', 'ស្វាយ'], answer: 1, explain: 'Apple គឺ ផ្លែប៉ោម។' },
+        { q: 'បំពេញប្រយោគ៖ She ___ a student.', hint: 'She គឺឯកវចនៈ បុគ្គលទី៣។', options: ['am', 'are', 'is', 'be'], answer: 2, explain: 'ប្រើ “is” ជាមួយ he, she និង it។' },
+        { q: 'តើ “Thank you” មានន័យដូចម្ដេច?', hint: 'A polite way to show gratitude.', options: ['សូមទោស', 'ជំរាបលា', 'អរគុណ', 'សូមស្វាគមន៍'], answer: 2, explain: 'Thank you មានន័យថា អរគុណ។' }
+      ];
+      const defaultState = { xp: 0, completed: [], learnedWords: [], streak: 0, lastStudyDate: '', activity: {}, quizBest: 0 };
+      let state = loadState();
+      let activeView = 'home';
+      let lessonFilter = 'all';
+      let wordFilter = 'all';
+      let wordIndex = 0;
+      let visibleWords = [...words];
+      let quizIndex = 0, quizScore = 0, selectedAnswer = null, answered = false, quizFinished = false;
+      let toastTimer;
+      function loadState() { try { const raw = localStorage.getItem('englishBloomState'); return raw ? { ...defaultState, ...JSON.parse(raw) } : { ...defaultState }; } catch (e) { return { ...defaultState }; } }
+      function saveState() { try { localStorage.setItem('englishBloomState', JSON.stringify(state)); } catch (e) { } }
+      function localDateKey(date = new Date()) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
+      function previousDateKey(key) { const d = new Date(key + 'T12:00:00'); d.setDate(d.getDate() - 1); return localDateKey(d); }
+      function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+      function toast(message) { const el = document.getElementById('toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2600); }
+      function speak(text) { if (!('speechSynthesis' in window)) { toast('កម្មវិធីរុករកនេះមិនគាំទ្រការអានសំឡេងទេ។'); return; } window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = .82; window.speechSynthesis.speak(utterance); }
+      const navTitles = { home: ['សួស្តី អ្នករៀនពូកែ! 👋', 'ត្រៀមខ្លួនរៀនពាក្យថ្មីៗមួយចំនួនថ្ងៃនេះហើយឬនៅ?', 'YOUR DAILY LEARNING SPACE'], lessons: ['មេរៀនសម្រាប់អ្នក 📚', 'ជ្រើសរើសមេរៀនខ្លីមួយ ហើយចាប់ផ្ដើមហាត់ថ្ងៃនេះ។', 'YOUR LEARNING PATH'], vocabulary: ['ពាក្យថ្មីៗ ចងចាំបានយូរ 💬', 'ស្ដាប់ អាន ហើយហាត់បញ្ចេញសំឡេង។', 'WORD BY WORD'], practice: ['អ្នកអាចធ្វើបាន! ✍️', 'ហាត់បន្តិចម្ដងៗ ដើម្បីឱ្យកាន់តែមានទំនុកចិត្ត។', 'PRACTICE MAKES PROGRESS'], progress: ['មើលការរីកចម្រើនរបស់អ្នក 🌱', 'សូមអបអរសាទររាល់ជំហានដែលអ្នកបានធ្វើ។', 'YOUR PROGRESS'] };
+      function go(view) { activeView = view; document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${view}`)); document.querySelectorAll('[data-view]').forEach(el => el.classList.toggle('active', el.dataset.view === view)); const t = navTitles[view]; document.getElementById('pageTitle').textContent = t[0]; document.getElementById('pageSubtitle').textContent = t[1]; document.getElementById('pageEyebrow').textContent = t[2]; if (view === 'progress') renderProgress(); if (view === 'vocabulary') renderVocabulary(); if (view === 'practice' && !quizFinished) renderQuiz(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      function recordStudy(minutes) { const today = localDateKey(); if (state.lastStudyDate !== today) { state.streak = state.lastStudyDate === previousDateKey(today) ? state.streak + 1 : 1; state.lastStudyDate = today; } state.activity[today] = (state.activity[today] || 0) + minutes; saveState(); }
+      function completeLesson(id) { if (state.completed.includes(id)) { toast('អ្នកបានបញ្ចប់មេរៀននេះរួចហើយ! ល្អណាស់ 🎉'); return; } const lesson = lessons.find(x => x.id === id); if (!lesson) return; state.completed.push(id); state.xp += lesson.xp; recordStudy(lesson.duration); renderAll(); toast(`អបអរសាទរ! បញ្ចប់មេរៀន +${lesson.xp} XP ⭐`); go('home'); }
+      function markWordLearned(word) { if (!state.learnedWords.includes(word.en)) { state.learnedWords.push(word.en); saveState(); renderStats(); } }
+      function renderStats() { document.getElementById('streakValue').textContent = `${state.streak} ថ្ងៃ`; document.getElementById('xpValue').textContent = state.xp; document.getElementById('lessonValue').textContent = state.completed.length; document.getElementById('wordValue').textContent = state.learnedWords.length; document.getElementById('streakHint').textContent = state.streak > 0 ? 'អស្ចារ្យ! 🔥' : 'ចាប់ផ្ដើមថ្ងៃនេះ'; document.getElementById('progressXP').textContent = `${state.xp} XP`; document.getElementById('progressLessons').textContent = `${state.completed.length} / ${lessons.length}`; document.getElementById('progressStreak').textContent = `${state.streak} ថ្ងៃ`; const pct = Math.min(100, Math.round(state.completed.length / lessons.length * 100)); document.getElementById('goalPercent').textContent = `${pct}%`; document.getElementById('goalRing').style.setProperty('--progress', `${pct}%`); document.getElementById('goalBar').style.width = `${pct}%`; document.getElementById('goalStatus').textContent = pct === 100 ? 'គោលដៅមេរៀនសម្រេចហើយ!' : state.completed.length ? 'កំពុងរីកចម្រើន!' : 'អ្នកចាប់ផ្ដើមបានហើយ'; document.getElementById('goalDescription').textContent = `បានបញ្ចប់ ${state.completed.length} ក្នុងចំណោម ${lessons.length} មេរៀន។ បន្តទៅទៀត!`; }
+      function lessonCard(l, compact = false) { const done = state.completed.includes(l.id); return `<article class="${compact ? 'lesson-row' : 'course-card'}"><div class="${compact ? 'lesson-emoji' : 'course-card-top'}"><span ${compact ? '' : 'class="course-art"'}>${l.emoji}</span>${compact ? '' : `<span class="pill">${l.category}</span>`}</div><div class="${compact ? 'lesson-info' : ''}"><h3>${escapeHtml(l.title)}</h3>${compact ? `<p>${escapeHtml(l.en)} · ${l.duration} នាទី</p>` : `<p>${escapeHtml(l.description)}</p><div class="lesson-meta"><span>${l.level}</span><span>•</span><span>◷ ${l.duration} នាទី</span><span>•</span><span>⭐ ${l.xp} XP</span></div>`}</div>${compact ? `<button class="icon-btn" data-openlesson="${l.id}" aria-label="បើកមេរៀន">${done ? '✓' : '→'}</button>` : `<div class="bottom-row"><span style="font-size:10px;color:var(--muted)">${done ? '✅ បានបញ្ចប់' : '📘 មេរៀនខ្លី'}</span><button class="small-primary" data-openlesson="${l.id}">${done ? 'រៀនម្ដងទៀត' : 'ចាប់ផ្ដើម →'}</button></div>`}</article>`; }
+      function renderHome() { document.getElementById('dailyLessons').innerHTML = lessons.slice(0, 3).map(l => lessonCard(l, true)).join(''); const paths = [{ label: 'Vocabulary', kh: 'ពាក្យថ្មីៗ', emoji: '🔤', color: 'var(--peach)', desc: 'ពាក្យថ្មី និងអត្ថន័យ', goto: 'vocabulary', p: state.learnedWords.length / words.length * 100 }, { label: 'Grammar', kh: 'វេយ្យាករណ៍', emoji: '🧩', color: 'var(--mint)', desc: 'បង្កើតប្រយោគ', goto: 'lessons', p: state.completed.filter(id => lessons.find(l => l.id === id)?.category === 'Grammar').length / 2 * 100 }, { label: 'Speaking', kh: 'ការនិយាយ', emoji: '🎧', color: 'var(--blue-soft)', desc: 'ស្ដាប់ និងនិយាយតាម', goto: 'lessons', p: state.completed.filter(id => lessons.find(l => l.id === id)?.category === 'Speaking').length / 2 * 100 }, { label: 'Practice', kh: 'លំហាត់', emoji: '🎯', color: 'var(--yellow-soft)', desc: 'សាកល្បងចំណេះដឹង', goto: 'practice', p: state.quizBest / 5 * 100 }]; document.getElementById('homePath').innerHTML = paths.map(p => `<button class="path-card" data-goto="${p.goto}"><span class="path-emoji" style="background:${p.color}">${p.emoji}</span><strong>${p.kh}</strong><small>${p.desc}</small><div class="progress-track"><div class="progress-fill" style="width:${Math.min(100, p.p)}%"></div></div></button>`).join(''); }
+      function renderLessons() { const filtered = lessonFilter === 'all' ? lessons : lessons.filter(l => l.category === lessonFilter); document.getElementById('allLessons').innerHTML = filtered.map(l => lessonCard(l, false) + (l.custom ? `<div class="manage-actions" style="margin-top:-4px"><button class="outline-btn" data-editlesson="${l.id}">✏️ កែប្រែ</button><button class="outline-btn" data-deletelesson="${l.id}">🗑️ លុប</button></div>` : '')).join('') || '<div class="empty-note">មិនទាន់មានមេរៀនក្នុងប្រភេទនេះទេ។</div>'; }
+      function renderVocabulary() { visibleWords = wordFilter === 'all' ? [...words] : words.filter(w => w.category === wordFilter); if (!visibleWords.length) visibleWords = [...words]; wordIndex = Math.min(wordIndex, visibleWords.length - 1); if (wordIndex < 0) wordIndex = 0; const w = visibleWords[wordIndex]; document.getElementById('flashCounter').textContent = `ពាក្យ ${wordIndex + 1} ក្នុង ${visibleWords.length}`; document.getElementById('flashEmoji').textContent = w.emoji; document.getElementById('flashWord').textContent = w.en; document.getElementById('flashPhonetic').textContent = w.phon; document.getElementById('flashMeaning').textContent = w.km; document.getElementById('flashExample').innerHTML = `${escapeHtml(w.example)}<br>${escapeHtml(w.translation)}`; document.getElementById('wordCountPill').textContent = `${visibleWords.length} WORDS`; document.getElementById('wordList').innerHTML = visibleWords.map((item, i) => `<button class="word-list-item ${i === wordIndex ? 'selected' : ''}" data-wordindex="${i}"><span class="w-emoji">${item.emoji}</span><span class="w-copy"><strong>${escapeHtml(item.en)}</strong><small>${escapeHtml(item.km)}</small></span><span style="color:var(--muted);font-size:10px">${state.learnedWords.includes(item.en) ? '✓' : '→'}</span></button>`).join(''); }
+      function renderQuiz() { const root = document.getElementById('quizContent'); const question = questions[quizIndex]; document.getElementById('quizStepLabel').textContent = `សំណួរ ${Math.min(quizIndex + 1, questions.length)} ក្នុង ${questions.length}`; document.getElementById('quizScoreLabel').textContent = `ពិន្ទុ ${quizScore}`; document.getElementById('quizProgressFill').style.width = `${quizFinished ? 100 : ((quizIndex + 1) / questions.length * 100)}%`; if (quizFinished) { const pct = Math.round(quizScore / questions.length * 100); root.innerHTML = `<div class="quiz-result"><div class="result-emoji">${pct >= 80 ? '🏆' : pct >= 60 ? '🌟' : '🌱'}</div><div class="quiz-kicker">QUIZ COMPLETE</div><h2>${pct >= 80 ? 'អស្ចារ្យណាស់!' : pct >= 60 ? 'ធ្វើបានល្អ!' : 'បន្តហាត់ទៀត!'}</h2><p>អ្នកបានបញ្ចប់សំណួរទាំងអស់។ ការហាត់រៀនម្ដងទៀតនឹងជួយឱ្យចងចាំបានកាន់តែច្បាស់។</p><div class="result-score">${quizScore} / ${questions.length}</div><p>ពិន្ទុរបស់អ្នក ${pct}%</p><button class="small-primary" id="retryQuiz" style="padding:13px 20px;font-size:12px">ធ្វើតេស្តម្ដងទៀត ↻</button></div>`; document.getElementById('quizStepLabel').textContent = 'បានបញ្ចប់ហើយ'; document.getElementById('quizProgressFill').style.width = '100%'; document.getElementById('quizScoreLabel').textContent = `ពិន្ទុ ${quizScore}`; return; } root.innerHTML = `<div class="quiz-kicker">✦ QUICK CHALLENGE</div><h2 class="quiz-question">${escapeHtml(question.q)}</h2><p class="quiz-help">${escapeHtml(question.hint)}</p><div class="quiz-options">${question.options.map((o, i) => `<button class="quiz-option ${selectedAnswer === i ? 'chosen' : ''} ${answered && i === question.answer ? 'correct' : ''} ${answered && selectedAnswer === i && i !== question.answer ? 'incorrect' : ''}" data-answer="${i}" ${answered ? 'disabled' : ''}><span class="option-key">${String.fromCharCode(65 + i)}</span><span>${escapeHtml(o)}</span>${answered && i === question.answer ? '<span style="margin-left:auto">✓</span>' : ''}</button>`).join('')}</div><div class="quiz-footer"><div class="quiz-feedback">${answered ? `${selectedAnswer === question.answer ? '✅ ត្រឹមត្រូវ! ' : '💡 ចម្លើយត្រឹមត្រូវ។ '}${escapeHtml(question.explain)}` : 'ជ្រើសរើសចម្លើយមួយខាងលើ។'}</div><button class="small-primary" id="quizAction" ${selectedAnswer === null && !answered ? 'disabled' : ''} style="opacity:${selectedAnswer === null && !answered ? '.55' : '1'}">${answered ? (quizIndex === questions.length - 1 ? 'មើលលទ្ធផល →' : 'សំណួរបន្ទាប់ →') : 'ពិនិត្យចម្លើយ'}</button></div>`; }
+      function answerQuiz(i) { if (answered) return; selectedAnswer = i; answered = true; if (i === questions[quizIndex].answer) quizScore++; renderQuiz(); }
+      function quizAction() { if (!answered) { if (selectedAnswer === null) { toast('សូមជ្រើសរើសចម្លើយមួយសិន។'); return; } return; } if (quizIndex < questions.length - 1) { quizIndex++; selectedAnswer = null; answered = false; renderQuiz(); } else { quizFinished = true; state.quizBest = Math.max(state.quizBest, quizScore); state.xp += quizScore * 2; recordStudy(5); saveState(); renderQuiz(); renderStats(); toast(`បានបញ្ចប់តេស្ត! +${quizScore * 2} XP ⭐`); } }
+      function restartQuiz() { quizIndex = 0; quizScore = 0; selectedAnswer = null; answered = false; quizFinished = false; renderQuiz(); }
+      function renderProgress() { renderStats(); const days = ['អាទិ', 'ចន្ទ', 'អង្គ', 'ពុធ', 'ព្រហ', 'សុក្រ', 'សៅរ៍']; const now = new Date(); const jsDay = now.getDay(); const mondayOffset = (jsDay + 6) % 7; const monday = new Date(now); monday.setDate(now.getDate() - mondayOffset); let chart = ''; let max = 1; const data = []; for (let i = 0; i < 7; i++) { const d = new Date(monday); d.setDate(monday.getDate() + i); const key = localDateKey(d); const val = state.activity[key] || 0; data.push({ label: days[(i + 1) % 7], val, key, today: key === localDateKey() }); max = Math.max(max, val); } chart = data.map(d => `<div class="bar-wrap"><div class="bar ${d.today ? 'today' : ''}" title="${d.val} នាទី" style="height:${Math.max(4, d.val / max * 145)}px"></div><div class="bar-day">${d.label}</div></div>`).join(''); document.getElementById('activityChart').innerHTML = chart; const ach = [{ e: '🌱', title: 'ជំហានដំបូង', desc: 'បញ្ចប់មេរៀនដំបូង', ok: state.completed.length >= 1 }, { e: '🔥', title: 'មិនបោះបង់', desc: 'រៀនជាប់គ្នា 3 ថ្ងៃ', ok: state.streak >= 3 }, { e: '⭐', title: 'អ្នកប្រមូលពិន្ទុ', desc: 'ប្រមូលបាន 100 XP', ok: state.xp >= 100 }, { e: '📚', title: 'អ្នកស្រឡាញ់ការរៀន', desc: 'បញ្ចប់មេរៀន 5', ok: state.completed.length >= 5 }, { e: '💬', title: 'ពាក្យពេញឃ្លាំង', desc: 'រៀនពាក្យថ្មី 5', ok: state.learnedWords.length >= 5 }, { e: '🎯', title: 'ឆ្លើយបានល្អ', desc: 'ទទួលបាន 4/5 ក្នុងតេស្ត', ok: state.quizBest >= 4 }]; document.getElementById('achievementGrid').innerHTML = ach.map(a => `<div class="achievement ${a.ok ? '' : 'locked'}"><div class="badge-emoji">${a.e}</div><strong>${a.title} ${a.ok ? '✓' : ''}</strong><p>${a.desc}</p></div>`).join(''); }
+      function renderAll() { renderStats(); renderHome(); renderLessons(); renderVocabulary(); renderProgress(); }
+      function openLesson(id) { const l = lessons.find(x => x.id === id); if (!l) return; const already = state.completed.includes(id); const lines = l.content.map(([en, km]) => `<div style="padding:12px 0;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><strong style="font-size:14px">${escapeHtml(en)}</strong><button class="icon-btn" data-speak="${escapeHtml(en)}" aria-label="ស្ដាប់ប្រយោគ">🔊</button></div><div style="font-size:11px;color:var(--muted);margin-top:5px">${escapeHtml(km)}</div></div>`).join(''); const content = `<div class="quiz-shell"><div class="quiz-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:21px"><div class="course-art" style="width:60px;height:60px;font-size:30px">${l.emoji}</div><div><div class="quiz-kicker">${l.category} · ${l.duration} នាទី</div><h2 style="font-size:23px;margin:0 0 5px">${escapeHtml(l.title)}</h2><p style="font-size:11px;color:var(--muted);margin:0">${escapeHtml(l.en)}</p></div></div><p style="font-size:12px;color:var(--muted);line-height:1.8">${escapeHtml(l.description || '')}</p>${l.image ? `<img src="${l.image}" alt="រូបភាពមេរៀន" style="display:block;max-width:100%;max-height:300px;object-fit:contain;border-radius:14px;margin:14px auto">` : ''}<div style="margin-top:20px">${lines}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px"><button class="outline-btn" id="closeLesson">← ត្រឡប់</button><button class="small-primary" id="finishLesson" data-finish="${l.id}">${already ? 'រៀនម្ដងទៀត' : 'សម្គាល់ថាបានរៀន ✓'}</button></div></div></div>`; const temp = document.createElement('div'); temp.innerHTML = content; const old = document.getElementById('lessonOverlay'); if (old) old.remove(); const overlay = document.createElement('div'); overlay.id = 'lessonOverlay'; overlay.style.cssText = 'position:fixed;inset:0;z-index:25;overflow:auto;background:var(--canvas);padding:24px 16px 40px'; overlay.innerHTML = `<div style="max-width:820px;margin:0 auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div class="brand"><div class="brand-mark">✿</div><div><div class="brand-name">English Bloom</div><div class="brand-sub">LEARNING LESSON</div></div></div><button class="outline-btn" id="closeLessonTop">✕ បិទ</button></div>${content}</div>`; document.body.appendChild(overlay); }
+      function resetLessonForm() { document.getElementById('lessonForm').reset(); document.getElementById('editLessonId').value=''; document.getElementById('customEmoji').value='📘'; const img=document.getElementById('customImagePreview'); img.style.display='none'; img.removeAttribute('src'); document.getElementById('customImage').value=''; }
+      function fileAsDataURL(file) { return new Promise((resolve,reject)=>{ const r=new FileReader(); r.onload=()=>resolve(r.result); r.onerror=reject; r.readAsDataURL(file); }); }
+      function renderSongs() { const root=document.getElementById('songLibrary'); if(!songs.length){root.innerHTML='<div class="empty-note">មិនទាន់មានចម្រៀងទេ។ សូមបញ្ចូលឯកសារសំឡេងខាងលើ។</div>';return;} root.innerHTML=songs.map((song,i)=>`<div class="song-row"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="font-size:12px">🎵 ${escapeHtml(song.title)}</strong><button type="button" class="outline-btn" data-deletesong="${i}">លុប</button></div><audio controls preload="metadata" src="${song.data}">កម្មវិធីរុករកមិនគាំទ្រសំឡេងនេះទេ</audio></div>`).join(''); }
+      document.getElementById('customImage').addEventListener('change', async e=>{const file=e.target.files[0]; if(!file)return; if(file.size>2*1024*1024){toast('រូបភាពធំពេក។ សូមជ្រើសរើសរូបភាពក្រោម 2MB។');e.target.value='';return;} const img=document.getElementById('customImagePreview'); img.src=await fileAsDataURL(file); img.style.display='block';});
+      document.getElementById('lessonForm').addEventListener('submit', async e=>{e.preventDefault(); const editId=document.getElementById('editLessonId').value; const old=customLessons.find(x=>x.id===editId); const imageFile=document.getElementById('customImage').files[0]; let image=old?.image||''; if(imageFile){if(imageFile.size>2*1024*1024){toast('រូបភាពត្រូវតែតូចជាង 2MB។');return;} image=await fileAsDataURL(imageFile);} const content=document.getElementById('customContent').value.split(/\r?\n/).map(line=>line.split('=')).filter(parts=>parts.length>=2 && parts[0].trim() && parts.slice(1).join('=').trim()).map(parts=>[parts[0].trim(),parts.slice(1).join('=').trim()]); if(!content.length){toast('សូមបញ្ចូលខ្លឹមសារជា English = ខ្មែរ។');return;} const lesson={id:editId||('custom-'+Date.now()),custom:true,title:document.getElementById('customTitle').value.trim(),en:document.getElementById('customEnglish').value.trim()||'Custom lesson',category:document.getElementById('customCategory').value,emoji:document.getElementById('customEmoji').value.trim()||'📘',level:'Beginner',duration:5,description:document.getElementById('customDescription').value.trim(),xp:20,content,image}; if(editId) customLessons=customLessons.map(x=>x.id===editId?lesson:x); else customLessons.push(lesson); try{localStorage.setItem('englishBloomCustomLessons',JSON.stringify(customLessons));}catch(_){toast('មិនអាចរក្សាទុកបានទេ។ សូមប្រើរូបភាពតូចជាងមុន។');return;} refreshLessons(); renderLessons(); renderHome(); resetLessonForm(); toast('បានរក្សាទុកមេរៀនរួចរាល់!'); });
+      document.getElementById('cancelLessonEdit').addEventListener('click',resetLessonForm);
+      document.getElementById('songForm').addEventListener('submit',async e=>{e.preventDefault();const file=document.getElementById('songFile').files[0];if(!file)return;if(file.size>3*1024*1024){toast('ឯកសារសំឡេងធំពេក។ សូមជ្រើសរើសឯកសារក្រោម 3MB។');return;}const song={title:document.getElementById('songTitle').value.trim(),data:await fileAsDataURL(file)};songs.push(song);try{localStorage.setItem('englishBloomSongs',JSON.stringify(songs));}catch(_){songs.pop();toast('ទំហំផ្ទុក browser មិនគ្រប់គ្រាន់ទេ។ សូមប្រើឯកសារតូចជាងមុន។');return;}e.target.reset();renderSongs();toast('បានបន្ថែមសំឡេងទៅបញ្ជីស្ដាប់!');});
+      document.addEventListener('click',e=>{const edit=e.target.closest('[data-editlesson]');if(edit){const l=customLessons.find(x=>x.id===edit.dataset.editlesson);if(!l)return;document.getElementById('editLessonId').value=l.id;document.getElementById('customTitle').value=l.title;document.getElementById('customEnglish').value=l.en;document.getElementById('customCategory').value=l.category;document.getElementById('customEmoji').value=l.emoji;document.getElementById('customDescription').value=l.description||'';document.getElementById('customContent').value=l.content.map(x=>x.join(' = ')).join('\n');const img=document.getElementById('customImagePreview');if(l.image){img.src=l.image;img.style.display='block';}document.querySelector('#view-lessons .manage-box').open=true;document.getElementById('lessonForm').scrollIntoView({behavior:'smooth',block:'center'});return;}const del=e.target.closest('[data-deletelesson]');if(del&&confirm('តើអ្នកប្រាកដថាចង់លុបមេរៀននេះទេ?')){customLessons=customLessons.filter(x=>x.id!==del.dataset.deletelesson);localStorage.setItem('englishBloomCustomLessons',JSON.stringify(customLessons));refreshLessons();renderLessons();renderHome();toast('បានលុបមេរៀន។');return;}const ds=e.target.closest('[data-deletesong]');if(ds){songs.splice(Number(ds.dataset.deletesong),1);localStorage.setItem('englishBloomSongs',JSON.stringify(songs));renderSongs();toast('បានលុបឯកសារសំឡេង។');}});
+      function initDate() { const now = new Date(); const label = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase(); document.getElementById('pageEyebrow').textContent = label; document.getElementById('dateChip').textContent = '📅 ' + now.toLocaleDateString('km-KH', { day: 'numeric', month: 'short' }); }
+      document.addEventListener('click', e => {
+        const viewBtn = e.target.closest('[data-view]'); if (viewBtn) { go(viewBtn.dataset.view); return; }
+        const goto = e.target.closest('[data-goto]'); if (goto) { go(goto.dataset.goto); return; }
+        const open = e.target.closest('[data-openlesson]'); if (open) { openLesson(open.dataset.openlesson); return; }
+        const answer = e.target.closest('[data-answer]'); if (answer) { answerQuiz(Number(answer.dataset.answer)); return; }
+        const word = e.target.closest('[data-wordindex]'); if (word) { wordIndex = Number(word.dataset.wordindex); markWordLearned(visibleWords[wordIndex]); renderVocabulary(); return; }
+        const speakBtn = e.target.closest('[data-speak]'); if (speakBtn) { speak(speakBtn.dataset.speak); return; }
+        const filter = e.target.closest('[data-filter]'); if (filter) { lessonFilter = filter.dataset.filter; document.querySelectorAll('[data-filter]').forEach(b => b.classList.toggle('active', b === filter)); renderLessons(); return; }
+        const wf = e.target.closest('[data-wordfilter]'); if (wf) { wordFilter = wf.dataset.wordfilter; wordIndex = 0; document.querySelectorAll('[data-wordfilter]').forEach(b => b.classList.toggle('active', b === wf)); renderVocabulary(); return; }
+        if (e.target.closest('#startToday')) { openLesson(state.completed.includes('hello') ? 'colors' : 'hello'); return; }
+        if (e.target.closest('#todayWordSpeak')) { speak('Beautiful'); return; }
+        if (e.target.closest('#speakWord')) { const w = visibleWords[wordIndex]; speak(w.en); markWordLearned(w); renderVocabulary(); toast(`បានរៀនពាក្យ “${w.en}” ហើយ!`); return; }
+        if (e.target.closest('#nextWord')) { wordIndex = (wordIndex + 1) % visibleWords.length; renderVocabulary(); return; }
+        if (e.target.closest('#prevWord')) { wordIndex = (wordIndex - 1 + visibleWords.length) % visibleWords.length; renderVocabulary(); return; }
+        if (e.target.closest('#quizAction')) { quizAction(); return; }
+        if (e.target.closest('#retryQuiz')) { restartQuiz(); return; }
+        if (e.target.closest('#closeLesson') || e.target.closest('#closeLessonTop')) { document.getElementById('lessonOverlay')?.remove(); return; }
+        const finish = e.target.closest('[data-finish]'); if (finish) { const id = finish.dataset.finish; document.getElementById('lessonOverlay')?.remove(); completeLesson(id); return; }
+      });
+      initDate(); renderAll(); renderQuiz(); renderSongs();
+    })();
+  </script>
+</body>
+
+</html>
